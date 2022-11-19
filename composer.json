@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "Waterline\\": "app/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Waterline\\Tests\\": "tests/"
         }
     },
     "extra": {
