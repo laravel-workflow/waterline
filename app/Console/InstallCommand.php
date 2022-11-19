@@ -48,7 +48,7 @@ class InstallCommand extends Command
         file_put_contents(app_path('Providers/WaterlineServiceProvider.php'), str_replace(
             "namespace App\Providers;",
             "namespace {$namespace}\Providers;",
-            file_get_contents(app_path('Providers/.php'))
+            file_get_contents(app_path('Providers/WaterlineServiceProvider.php'))
         ));
     }
 }
