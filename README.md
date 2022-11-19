@@ -1,6 +1,6 @@
-# Laravel Workflow [![PHP Composer](https://github.com/laravel-workflow/laravel-workflow/actions/workflows/php.yml/badge.svg)](https://github.com/laravel-workflow/laravel-workflow/actions/workflows/php.yml)
+# Waterline
 
-Durable workflow engine that allows users to write long running persistent distributed workflows (orchestrations) in PHP powered by [Laravel Queues](https://laravel.com/docs/9.x/queues).
+An elegant UI for monitoring [Laravel Workflows](https://github.com/laravel-workflow/laravel-workflow).
 
 ## Installation
 
