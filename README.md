@@ -16,6 +16,17 @@ php artisan waterline:install
 
 Waterline exposes a dashboard at the `/waterline` URL. By default, you will only be able to access this dashboard in the local environment. However, within your `app/Providers/WaterlineServiceProvider.php` file, there is an authorization gate definition. This authorization gate controls access to Waterline in non-local environments.
 
+```
+Gate::define('viewWaterline', function ($user) {
+    return in_array($user->email, [
+        'admin@example.com',
+    ]);
+});
+```
+
+This will allow only the single admin user to access the Waterline UI.
+
+
 ## Upgrading Waterline
 
 After upgrading Waterline you must publish the latest assets.
