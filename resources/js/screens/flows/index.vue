@@ -168,7 +168,7 @@
                 <tr>
                     <th>Flow</th>
                     <th v-if="$route.params.type=='running'" class="text-right">Started At</th>
-                    <th v-if="$route.params.type=='completed'">Started At</th>
+                    <th v-if="$route.params.type=='completed' || $route.params.type=='failed'">Started At</th>
                     <th v-if="$route.params.type=='completed'">Completed At</th>
                     <th v-if="$route.params.type=='failed'">Failed At</th>
                     <th v-if="$route.params.type=='completed' || $route.params.type=='failed'" class="text-right">Duration</th>

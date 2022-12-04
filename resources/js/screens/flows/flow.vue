@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <div class="card mt-4" v-if="ready">
+        <div class="card mt-4" v-if="ready && flow.logs && flow.logs.length">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5>Timeline</h5>
 
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="card mt-4" v-if="ready">
+        <div class="card mt-4" v-if="ready && flow.logs && flow.logs.length">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5>Activities</h5>
 
@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <div class="card mt-4" v-if="ready">
+        <div class="card mt-4" v-if="ready && flow.exceptions && flow.exceptions.length">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5>Exceptions</h5>
 
@@ -145,9 +145,10 @@
                         <template v-for="exception in flow.exceptions">
                             <tr>
                                 <td>{{ exception.class }}</td>
-                                <td><button title="View Exception" class="btn btn-outline-primary ml-auto"
+                                <td v-if="exception.code"><button title="View Exception" class="btn btn-outline-primary ml-auto"
                                         data-toggle="collapse" :href="'#collapse' + exception.id" aria-expanded="false"
                                         :aria-controls="'collapse' + exception.id">View</button></td>
+                                <td v-else>-</td>
                                 <td>{{ timestamp(exception.created_at) }}</td>
                             </tr>
                             <tr :id="'collapse' + exception.id" class="collapse">
@@ -237,6 +238,7 @@ export default {
                         }
                         if (seriesIndex === 1) {
                             let exception = phpunserialize(this.flow.exceptions[dataPointIndex].exception)
+                            if (typeof exception !== 'object') return '';
                             exception.__constructor = this.flow.exceptions[dataPointIndex].exception.split('"')[1]
 
                             return '<div style="padding: 1em">' +

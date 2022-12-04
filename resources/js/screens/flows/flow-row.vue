@@ -16,11 +16,11 @@
             {{ timestamp(flow.created_at) }}
         </td>
 
-        <td v-if="$route.params.type=='completed'" class="table-fit">
+        <td v-if="$route.params.type=='completed' || $route.params.type=='failed'" class="table-fit">
             {{ timestamp(flow.updated_at) }}
         </td>
 
-        <td v-if="$route.params.type=='completed'" class="table-fit">
+        <td v-if="$route.params.type=='completed' || $route.params.type=='failed'" class="table-fit">
             <span>{{ duration(flow.created_at, flow.updated_at) }}</span>
         </td>
     </tr>
