@@ -45,4 +45,4 @@ php artisan waterline:publish
 
 ![workflow](https://user-images.githubusercontent.com/1130888/202864523-edd88fce-0ce9-4e5a-a24c-38afeae4e057.png)
 
-<sub><sup>"Laravel" is a registered trademark of Taylor Otwell. This project is not affiliated, associated, endorsed, or sponsored by Taylor Otwell, nor have they been reviewed, tested, or certified by Taylor Otwell. The use of the trademark "Laravel" on this website is for informational and descriptive purposes only. Laravel Workflow is not officially related to the Laravel trademark or Taylor Otwell.</sup></sub>
+<sub><sup>"Laravel" is a registered trademark of Taylor Otwell. This project is not affiliated, associated, endorsed, or sponsored by Taylor Otwell, nor has it been reviewed, tested, or certified by Taylor Otwell. The use of the trademark "Laravel" is for informational and descriptive purposes only. Laravel Workflow is not officially related to the Laravel trademark or Taylor Otwell.</sup></sub>
