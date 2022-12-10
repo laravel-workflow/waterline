@@ -10,33 +10,33 @@ class DashboardStatsController extends Controller
 {
     public function index() {
 
-        $flowsPastHour = StoredWorkflow::where('updated_at', '>=', now()->subHour())
+        $flowsPastHour = config('workflows.stored_workflow_model', StoredWorkflow::class)::where('updated_at', '>=', now()->subHour())
             ->count();
 
-        $exceptionsPastHour = StoredWorkflowException::where('created_at', '>=', now()->subHour())
+        $exceptionsPastHour = config('workflows.stored_workflow_exception_model', StoredWorkflowException::class)::where('created_at', '>=', now()->subHour())
             ->count();
 
-        $failedFlowsPastWeek = StoredWorkflow::where('status', 'failed')
+        $failedFlowsPastWeek = config('workflows.stored_workflow_model', StoredWorkflow::class)::where('status', 'failed')
             ->where('updated_at', '>=', now()->subDays(7))
             ->count();
 
-        $maxWaitTimeWorkflow = StoredWorkflow::where('status', 'pending')
+        $maxWaitTimeWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::where('status', 'pending')
             ->orderBy('updated_at')
             ->first();
 
-        $maxDurationWorkflow = StoredWorkflow::select('*')
+        $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
             ->addSelect(DB::raw('TIMEDIFF(created_at, updated_at) as duration'))
             ->where('status', '!=', 'pending')
             ->orderBy('duration')
             ->first();
 
-        $maxExceptionsWorkflow = StoredWorkflow::withCount('exceptions')
+        $maxExceptionsWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::withCount('exceptions')
             ->orderByDesc('exceptions_count')
             ->orderByDesc('updated_at')
             ->first();
 
         return response()->json([
-            'flows' => StoredWorkflow::count(),
+            'flows' => config('workflows.stored_workflow_model', StoredWorkflow::class)::count(),
             'flows_per_minute' => $flowsPastHour / 60,
             'flows_past_hour' => $flowsPastHour,
             'exceptions_past_hour' => $exceptionsPastHour,

@@ -8,19 +8,19 @@ use Workflow\Models\StoredWorkflow;
 class WorkflowsController extends Controller
 {
     public function completed() {
-        return StoredWorkflow::whereStatus('completed')
+        return config('workflows.stored_workflow_model', StoredWorkflow::class)::whereStatus('completed')
             ->orderByDesc('id')
             ->paginate(50);
     }
 
     public function failed() {
-        return StoredWorkflow::whereStatus('failed')
+        return config('workflows.stored_workflow_model', StoredWorkflow::class)::whereStatus('failed')
             ->orderByDesc('id')
             ->paginate(50);
         }
 
     public function running() {
-        return StoredWorkflow::whereIn('status', [
+        return config('workflows.stored_workflow_model', StoredWorkflow::class)::whereIn('status', [
                 'created',
                 'pending',
                 'running',
@@ -31,7 +31,7 @@ class WorkflowsController extends Controller
     }
 
     public function show($id) {
-        $flow = StoredWorkflow::whereId($id)->with(['exceptions', 'logs'])->first();
+        $flow = config('workflows.stored_workflow_model', StoredWorkflow::class)::whereId($id)->with(['exceptions', 'logs'])->first();
 
         $flow->exceptions = $flow->exceptions->map(function ($exception) {
             $unserialized = unserialize($exception->exception);
