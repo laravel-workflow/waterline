@@ -4,6 +4,7 @@ namespace Waterline\Http\Controllers;
 
 use SplFileObject;
 use Workflow\Models\StoredWorkflow;
+use Workflow\Serializers\Y;
 
 class WorkflowsController extends Controller
 {
@@ -33,8 +34,15 @@ class WorkflowsController extends Controller
     public function show($id) {
         $flow = config('workflows.stored_workflow_model', StoredWorkflow::class)::whereId($id)->with(['exceptions', 'logs'])->first();
 
+        $flow->arguments = serialize(Y::unserialize($flow->arguments));
+
+        $flow->logs = $flow->logs->map(function ($log) {
+            $log->result = serialize(Y::unserialize($log->result));
+            return $log;
+        });
+
         $flow->exceptions = $flow->exceptions->map(function ($exception) {
-            $unserialized = unserialize($exception->exception);
+            $unserialized = Y::unserialize($exception->exception);
             if (is_object($unserialized) && method_exists($unserialized, 'getFile')) {
                 $file = new SplFileObject($unserialized->getFile());
                 $file->seek($unserialized->getLine() - 4);
@@ -44,9 +52,13 @@ class WorkflowsController extends Controller
                     if ($file->eof()) break;
                 }
                 $exception->code = rtrim($exception->code);    
+                $unserialized->trace = $unserialized->getTrace();
             }
+            $exception->exception = serialize($unserialized);
             return $exception;
         });
+
+        $flow->output = serialize(Y::unserialize($flow->output));
 
         return $flow;
     }

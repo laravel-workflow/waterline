@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^8.0.2",
-        "laravel-workflow/laravel-workflow": ">=0.0.11",
+        "laravel-workflow/laravel-workflow": ">=0.0.19",
         "illuminate/support": "^9.0"
     },
     "require-dev": {
