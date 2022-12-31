@@ -51,14 +51,17 @@ class WorkflowsController extends Controller
                     $file->next();
                     if ($file->eof()) break;
                 }
-                $exception->code = rtrim($exception->code);    
-                $unserialized->trace = $unserialized->getTrace();
+                $exception->code = rtrim($exception->code);
+                try {
+                    $unserialized->trace = $unserialized->getTrace();
+                } catch (\Throwable $th) {
+                }
             }
             $exception->exception = serialize($unserialized);
             return $exception;
         });
 
-        $flow->output = serialize(Y::unserialize($flow->output));
+        $flow->output = $flow->output === null ? serialize(null) : serialize(Y::unserialize($flow->output));
 
         return $flow;
     }
