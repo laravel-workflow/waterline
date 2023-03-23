@@ -239,7 +239,11 @@ export default {
                         if (seriesIndex === 1) {
                             let exception = phpunserialize(this.flow.exceptions[dataPointIndex].exception)
                             if (typeof exception !== 'object') return '';
-                            exception.__constructor = this.flow.exceptions[dataPointIndex].exception.split('"')[1]
+                            if (exception.class) {
+                                exception.__constructor = exception.class
+                            } else {
+                                exception.__constructor = this.flow.exceptions[dataPointIndex].exception.split('"')[1]
+                            }
 
                             return '<div style="padding: 1em">' +
                                 '<b>Class</b>: ' + exception.__constructor + '<br />' +
@@ -340,7 +344,11 @@ export default {
         unserialize(data) {
             try {
                 let result = phpunserialize(data)
-                result.__constructor = data.split('"')[1]
+                if (result.class) {
+                    result.__constructor = result.class
+                } else {
+                    result.__constructor = data.split('"')[1]
+                }
                 return result
             } catch (err) {
                 try {
