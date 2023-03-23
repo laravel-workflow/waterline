@@ -25,7 +25,7 @@ class DashboardStatsController extends Controller
             ->first();
 
         $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
-            ->addSelect(DB::raw('TIMEDIFF(created_at, updated_at) as duration'))
+            ->addSelect(DB::raw('(EXTRACT(EPOCH FROM created_at - updated_at)) as duration'))
             ->where('status', '!=', 'pending')
             ->orderBy('duration')
             ->first();
