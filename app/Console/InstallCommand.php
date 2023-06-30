@@ -19,6 +19,9 @@ class InstallCommand extends Command
         $this->comment('Publishing Waterline Assets...');
         $this->callSilent('vendor:publish', ['--tag' => 'waterline-assets']);
 
+		$this->comment('Publishing Waterline Configuration...');
+        $this->callSilent('vendor:publish', ['--tag' => 'waterline-config']);
+
         $this->registerWaterlineServiceProvider();
 
         $this->info('Waterline installed successfully.');
