@@ -71,6 +71,10 @@ class WaterlineServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/Providers/WaterlineServiceProvider.stub' => app_path('Providers/WaterlineServiceProvider.php'),
             ], 'waterline-provider');
+
+			$this->publishes([
+                __DIR__.'/../config/waterline.php' => config_path('waterline.php'),
+            ], 'waterline-config');
         }
     }
 
@@ -100,5 +104,4 @@ class WaterlineServiceProvider extends ServiceProvider
             define('WATERLINE_PATH', realpath(__DIR__.'/../'));
         }
     }
-
 }
