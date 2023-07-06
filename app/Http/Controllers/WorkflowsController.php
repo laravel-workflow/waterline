@@ -42,6 +42,7 @@ class WorkflowsController extends Controller
         });
 
         $flow->exceptions = $flow->exceptions->map(function ($exception) {
+            $exception->code ??= null;
             $unserialized = Y::unserialize($exception->exception);
             if (is_array($unserialized) && array_key_exists('class', $unserialized) && is_subclass_of($unserialized['class'], \Throwable::class)) {
                 $file = new SplFileObject($unserialized['file']);
