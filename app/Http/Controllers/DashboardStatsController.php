@@ -24,21 +24,74 @@ class DashboardStatsController extends Controller
             ->orderBy('updated_at')
             ->first();
 
-        $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
-            ->when(config('database.default') === 'mysql', function ($q) {
-                return $q->addSelect(DB::raw('TIMEDIFF(created_at, updated_at) as duration'));
-            })
-            ->when(config('database.default') === 'pgsql', function ($q) {
-                return $q->addSelect(DB::raw('(EXTRACT(EPOCH FROM created_at - updated_at)) as duration'));
-            })
-            ->where('status', '!=', 'pending')
-            ->orderBy('duration')
-            ->first();
+        if (config('database.default') === 'mongodb' && $maxWaitTimeWorkflow && $maxWaitTimeWorkflow->_id) {
+            $maxWaitTimeWorkflow->id = $maxWaitTimeWorkflow->_id;
+        }
 
-        $maxExceptionsWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::withCount('exceptions')
-            ->orderByDesc('exceptions_count')
-            ->orderByDesc('updated_at')
-            ->first();
+        if (config('database.default') === 'mongodb') {
+            $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
+                ->raw(function ($collection) {
+                    return $collection->aggregate([
+                        [
+                            '$match' => [
+                                'status' => [ '$ne' => 'pending' ]
+                            ]
+                        ],
+                        [
+                            '$addFields' => [
+                                'duration' => [
+                                    '$subtract' => [
+                                        ['$toDate' => '$updated_at'],
+                                        ['$toDate' => '$created_at']
+                                    ]
+                                ]
+                            ]
+                        ],
+                        [
+                            '$sort' => ['duration' => -1]
+                        ],
+                        [
+                            '$limit' => 1
+                        ]
+                    ]);
+                })
+                ->first();
+                $maxDurationWorkflow->id = $maxDurationWorkflow->_id;
+        } else {
+            $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
+                ->when(config('database.default') === 'mysql', function ($q) {
+                    return $q->addSelect(DB::raw('TIMEDIFF(created_at, updated_at) as duration'));
+                })
+                ->when(config('database.default') === 'pgsql', function ($q) {
+                    return $q->addSelect(DB::raw('(EXTRACT(EPOCH FROM created_at - updated_at)) as duration'));
+                })
+                ->where('status', '!=', 'pending')
+                ->orderBy('duration')
+                ->first();
+        }
+
+        if (config('database.default') === 'mongodb') {
+            $maxExceptionsWorkflow = null;
+
+            $mostExceptionWorkflowId = StoredWorkflowException::raw(function ($collection) {
+                return $collection->aggregate([
+                    ['$group' => ['_id' => '$stored_workflow_id', 'count' => ['$sum' => 1]]],
+                    ['$sort' => ['count' => -1]],
+                    ['$limit' => 1]
+                ]);
+            })->first()['_id'];
+
+            $maxExceptionsWorkflow = StoredWorkflow::where('_id', $mostExceptionWorkflowId)->first();
+
+            $maxExceptionsWorkflow->exceptions_count = StoredWorkflowException::where('stored_workflow_id', $mostExceptionWorkflowId)->count();
+
+            $maxExceptionsWorkflow->id = $maxExceptionsWorkflow->_id;
+        } else {
+            $maxExceptionsWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::withCount('exceptions')
+                ->orderByDesc('exceptions_count')
+                ->orderByDesc('updated_at')
+                ->first();
+        }
 
         return response()->json([
             'flows' => config('workflows.stored_workflow_model', StoredWorkflow::class)::count(),
