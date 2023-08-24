@@ -32,7 +32,7 @@ class WorkflowsController extends Controller
     }
 
     public function show($id) {
-        $flow = config('workflows.stored_workflow_model', StoredWorkflow::class)::find($id)->with(['exceptions', 'logs'])->first();
+        $flow = config('workflows.stored_workflow_model', StoredWorkflow::class)::with(['exceptions', 'logs'])->find($id);
 
         $flow->arguments = serialize(Y::unserialize($flow->arguments));
 
