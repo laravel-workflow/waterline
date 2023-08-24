@@ -24,11 +24,13 @@ class DashboardStatsController extends Controller
             ->orderBy('updated_at')
             ->first();
 
-        if (config('database.default') === 'mongodb' && $maxWaitTimeWorkflow && $maxWaitTimeWorkflow->_id) {
+        $dbDriverName = DB::connection()->getDriverName();
+
+        if ($dbDriverName === 'mongodb' && $maxWaitTimeWorkflow && $maxWaitTimeWorkflow->_id) {
             $maxWaitTimeWorkflow->id = $maxWaitTimeWorkflow->_id;
         }
 
-        if (config('database.default') === 'mongodb') {
+        if ($dbDriverName === 'mongodb') {
             $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
                 ->raw(function ($collection) {
                     return $collection->aggregate([
@@ -59,10 +61,10 @@ class DashboardStatsController extends Controller
                 $maxDurationWorkflow->id = $maxDurationWorkflow->_id;
         } else {
             $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
-                ->when(config('database.default') === 'mysql', function ($q) {
+                ->when($dbDriverName === 'mysql', function ($q) {
                     return $q->addSelect(DB::raw('TIMEDIFF(created_at, updated_at) as duration'));
                 })
-                ->when(config('database.default') === 'pgsql', function ($q) {
+                ->when($dbDriverName === 'pgsql', function ($q) {
                     return $q->addSelect(DB::raw('(EXTRACT(EPOCH FROM created_at - updated_at)) as duration'));
                 })
                 ->where('status', '!=', 'pending')
@@ -70,7 +72,7 @@ class DashboardStatsController extends Controller
                 ->first();
         }
 
-        if (config('database.default') === 'mongodb') {
+        if ($dbDriverName === 'mongodb') {
             $maxExceptionsWorkflow = null;
 
             $mostExceptionWorkflowId = StoredWorkflowException::raw(function ($collection) {
