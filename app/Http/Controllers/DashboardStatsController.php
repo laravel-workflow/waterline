@@ -67,6 +67,9 @@ class DashboardStatsController extends Controller
                 ->when($dbDriverName === 'pgsql', function ($q) {
                     return $q->addSelect(DB::raw('(EXTRACT(EPOCH FROM created_at - updated_at)) as duration'));
                 })
+                ->when($dbDriverName === 'sqlsrv', function ($q) {
+                    return $q->addSelect(DB::raw('DATEDIFF(SECOND, created_at, updated_at) as duration'));
+                })
                 ->where('status', '!=', 'pending')
                 ->orderBy('duration')
                 ->first();
