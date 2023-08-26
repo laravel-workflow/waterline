@@ -25,6 +25,25 @@ services:
         depends_on:
             - mysql
             - redis
+    mssql:
+        image: 'mcr.microsoft.com/mssql/server:2022-latest'
+        ports:
+            - '${FORWARD_DB_PORT:-1433}:1433'
+        environment:
+            ACCEPT_EULA: 'Y'
+            MSSQL_SA_PASSWORD: 'password'
+            DB_USER: 'testing'
+            DB_NAME: 'testing'
+        volumes:
+            - 'sail-mssql:/var/lib/mssql/data'
+        networks:
+            - sail
+        healthcheck:
+            test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password" -Q "SELECT 1" -b -o /dev/null
+            interval: 10s
+            timeout: 3s
+            retries: 10
+            start_period: 10s
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
