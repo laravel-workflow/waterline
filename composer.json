@@ -17,7 +17,7 @@
         "fakerphp/faker": "^1.9.1",
         "jenssegers/mongodb": "^3.9",
         "mockery/mockery": "^1.4.4",
-        "mongodb/mongodb": "1.12",
+        "mongodb/mongodb": "1.11",
         "orchestra/testbench": "^7.29",
         "phpunit/phpunit": "^9.5.10"
     },
