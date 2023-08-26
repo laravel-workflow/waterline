@@ -10,8 +10,8 @@
     ],
     "require": {
         "php": "^8.0.2",
-        "laravel-workflow/laravel-workflow": ">=0.0.19",
-        "illuminate/support": "^9.0|^10.0"
+        "illuminate/support": "^9.0|^10.0",
+        "laravel-workflow/laravel-workflow": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9d0fdee343d2ba9c587092ff1282de4",
+    "content-hash": "f783a2d6cd33cd564e5527c8a09b9cf7",
     "packages": [
         {
             "name": "brick/math",
@@ -704,22 +704,22 @@
         },
         {
             "name": "laravel-workflow/laravel-workflow",
-            "version": "0.0.38",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-workflow/laravel-workflow.git",
-                "reference": "8a981e345d156f0fde0d4d70907db7203f09a9c4"
+                "reference": "1746c460ea14108a51411db42ea162476884f253"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-workflow/laravel-workflow/zipball/8a981e345d156f0fde0d4d70907db7203f09a9c4",
-                "reference": "8a981e345d156f0fde0d4d70907db7203f09a9c4",
+                "url": "https://api.github.com/repos/laravel-workflow/laravel-workflow/zipball/1746c460ea14108a51411db42ea162476884f253",
+                "reference": "1746c460ea14108a51411db42ea162476884f253",
                 "shasum": ""
             },
             "require": {
                 "laravel/framework": "^9.0|^10.0",
                 "php": "^8.0.2",
-                "react/promise": "^2.9",
+                "react/promise": "^2.9|^3.0",
                 "spatie/laravel-model-states": "^2.1"
             },
             "require-dev": {
@@ -755,9 +755,9 @@
             "description": "Durable workflow engine that allows users to write long running persistent distributed workflows (orchestrations) in PHP powered by Laravel queues.",
             "support": {
                 "issues": "https://github.com/laravel-workflow/laravel-workflow/issues",
-                "source": "https://github.com/laravel-workflow/laravel-workflow/tree/0.0.38"
+                "source": "https://github.com/laravel-workflow/laravel-workflow/tree/1.0.7"
             },
-            "time": "2023-06-01T20:55:20+00:00"
+            "time": "2023-08-24T21:52:57+00:00"
         },
         {
             "name": "laravel/framework",
