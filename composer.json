@@ -29,6 +29,9 @@
             "Waterline\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit --testdox"
+    },
     "extra": {
         "laravel": {
             "providers": [
