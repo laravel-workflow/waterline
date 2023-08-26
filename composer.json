@@ -30,7 +30,7 @@
         }
     },
     "scripts": {
-        "test": "composer test-mysql && composer test-pgsql && composer test-sqlite",
+        "test": "composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
         "test-mssql": "vendor/bin/phpunit --testdox --configuration=phpunit-mssql.xml",
         "test-mysql": "vendor/bin/phpunit --testdox --configuration=phpunit-mysql.xml",
         "test-pgsql": "vendor/bin/phpunit --testdox --configuration=phpunit-pgsql.xml",

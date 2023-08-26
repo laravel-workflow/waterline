@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use function Orchestra\Testbench\artisan;
 use function Orchestra\Testbench\workbench_path;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use PDO;
 use Waterline\Waterline;
 
 abstract class TestCase extends BaseTestCase
@@ -29,6 +30,18 @@ abstract class TestCase extends BaseTestCase
 
     protected function defineDatabaseMigrations()
     {
+        $this->app->bind('db.connector.sqlsrv', function () {
+            return new class extends \Illuminate\Database\Connectors\SqlServerConnector
+            {
+                protected $options = [
+                    PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+                ];
+            };
+        });
+
+        artisan($this, 'migrate:fresh');
         $this->loadLaravelMigrations();
         $this->loadMigrationsFrom('./vendor/laravel-workflow/laravel-workflow/src/migrations');
 
