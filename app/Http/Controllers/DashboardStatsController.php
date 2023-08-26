@@ -58,7 +58,9 @@ class DashboardStatsController extends Controller
                     ]);
                 })
                 ->first();
-                $maxDurationWorkflow->id = $maxDurationWorkflow->_id;
+                if ($maxDurationWorkflow) {
+                    $maxDurationWorkflow->id = $maxDurationWorkflow->_id;
+                }
         } else {
             $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
                 ->when($dbDriverName === 'sqlite', function ($q) {
@@ -79,21 +81,24 @@ class DashboardStatsController extends Controller
         }
 
         if ($dbDriverName === 'mongodb') {
-            $maxExceptionsWorkflow = null;
-
-            $mostExceptionWorkflowId = StoredWorkflowException::raw(function ($collection) {
+            $maxExceptionsWorkflow = StoredWorkflowException::raw(function ($collection) {
                 return $collection->aggregate([
                     ['$group' => ['_id' => '$stored_workflow_id', 'count' => ['$sum' => 1]]],
                     ['$sort' => ['count' => -1]],
                     ['$limit' => 1]
                 ]);
-            })->first()['_id'];
+            })->first();
 
-            $maxExceptionsWorkflow = StoredWorkflow::where('_id', $mostExceptionWorkflowId)->first();
+            if ($maxExceptionsWorkflow) {
+                $mostExceptionWorkflowId = $maxExceptionsWorkflow['_id'];
 
-            $maxExceptionsWorkflow->exceptions_count = StoredWorkflowException::where('stored_workflow_id', $mostExceptionWorkflowId)->count();
+                $maxExceptionsWorkflow = StoredWorkflow::where('_id', $mostExceptionWorkflowId)->first();
 
-            $maxExceptionsWorkflow->id = $maxExceptionsWorkflow->_id;
+                if ($maxExceptionsWorkflow) {
+                    $maxExceptionsWorkflow->exceptions_count = StoredWorkflowException::where('stored_workflow_id', $mostExceptionWorkflowId)->count();
+                    $maxExceptionsWorkflow->id = $maxExceptionsWorkflow->_id;
+                }
+            }
         } else {
             $maxExceptionsWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::withCount('exceptions')
                 ->has('exceptions')
