@@ -15,8 +15,10 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "jenssegers/mongodb": "^3.9",
         "mockery/mockery": "^1.4.4",
-        "orchestra/testbench": "8.9.1",
+        "mongodb/mongodb": "1.11",
+        "orchestra/testbench": "^7.29",
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
@@ -30,7 +32,8 @@
         }
     },
     "scripts": {
-        "test": "composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
+        "test": "composer test-mongo && composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
+        "test-mongo": "vendor/bin/phpunit --testdox --configuration=phpunit-mongo.xml",
         "test-mssql": "vendor/bin/phpunit --testdox --configuration=phpunit-mssql.xml",
         "test-mysql": "vendor/bin/phpunit --testdox --configuration=phpunit-mysql.xml",
         "test-pgsql": "vendor/bin/phpunit --testdox --configuration=phpunit-pgsql.xml",
