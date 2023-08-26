@@ -61,6 +61,9 @@ class DashboardStatsController extends Controller
                 $maxDurationWorkflow->id = $maxDurationWorkflow->_id;
         } else {
             $maxDurationWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::select('*')
+                ->when($dbDriverName === 'sqlite', function ($q) {
+                    return $q->addSelect(DB::raw('julianday(created_at) - julianday(updated_at) as duration'));
+                })
                 ->when($dbDriverName === 'mysql', function ($q) {
                     return $q->addSelect(DB::raw('TIMEDIFF(created_at, updated_at) as duration'));
                 })
@@ -93,6 +96,7 @@ class DashboardStatsController extends Controller
             $maxExceptionsWorkflow->id = $maxExceptionsWorkflow->_id;
         } else {
             $maxExceptionsWorkflow = config('workflows.stored_workflow_model', StoredWorkflow::class)::withCount('exceptions')
+                ->has('exceptions')
                 ->orderByDesc('exceptions_count')
                 ->orderByDesc('updated_at')
                 ->first();
