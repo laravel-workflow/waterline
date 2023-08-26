@@ -32,8 +32,6 @@ services:
         environment:
             ACCEPT_EULA: 'Y'
             MSSQL_SA_PASSWORD: 'P@ssword'
-            DB_USER: 'testing'
-            DB_NAME: 'testing'
         volumes:
             - 'sail-mssql:/var/lib/mssql/data'
             - './docker/create-testing-database-mssql.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'

@@ -49,6 +49,9 @@ RUN apt-get update \
     && pecl update-channels \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv \
+    && echo "extension=sqlsrv.so" | tee -a /etc/php/8.2/mods-available/sqlsrv.ini \
+    && echo "extension=pdo_sqlsrv.so" | tee -a /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
+    && phpenmod sqlsrv pdo_sqlsrv \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
