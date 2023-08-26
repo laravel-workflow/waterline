@@ -2,14 +2,11 @@
 
 namespace Waterline\Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Waterline\Tests\TestCase;
 use Workflow\Models\StoredWorkflow;
 
 class DashboardStatsControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIndexNone()
     {
         $response = $this

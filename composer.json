@@ -30,7 +30,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --testdox"
+        "test": "vendor/bin/phpunit --testdox --configuration=phpunit-sqlite.xml && vendor/bin/phpunit --testdox --configuration=phpunit-mysql.xml"
     },
     "extra": {
         "laravel": {

@@ -45,6 +45,24 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-ppassword"]
             retries: 3
             timeout: 5s
+    pgsql:
+        image: 'postgres:15'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: 'password'
+            POSTGRES_DB: 'testing'
+            POSTGRES_USER: 'testing'
+            POSTGRES_PASSWORD: 'password'
+        volumes:
+            - 'sail-pgsql:/var/lib/postgresql/data'
+            - './docker/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "testing", "-U", "testing"]
+            retries: 3
+            timeout: 5s
     redis:
         image: 'redis:alpine'
         ports:
@@ -62,6 +80,8 @@ networks:
         driver: bridge
 volumes:
     sail-mysql:
+        driver: local
+    sail-pgsql:
         driver: local
     sail-redis:
         driver: local
