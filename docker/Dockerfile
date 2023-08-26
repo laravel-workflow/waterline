@@ -47,6 +47,7 @@ RUN apt-get update \
     && ACCEPT_EULA=Y dpkg -i mssql-tools_17.10.1.1-1_amd64.deb \
     && apt-get install -f \
     && pecl update-channels \
+    && pecl upgrade mongodb \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv \
     && echo "extension=sqlsrv.so" | tee -a /etc/php/8.2/mods-available/sqlsrv.ini \
