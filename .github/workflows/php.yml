@@ -1,0 +1,73 @@
+name: build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+            ACCEPT_EULA: Y
+            MSSQL_PID: Express
+            MSSQL_SA_PASSWORD: P@ssword
+        ports:
+            - 1433:1433
+
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: testing
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+        - 3306:3306
+
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: testing
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: testbench
+        ports:
+        - 5432:5432
+
+      redis:
+        image: redis
+        ports:
+        - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 10
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Create databases
+      run: |
+        /opt/mssql-tools/bin/sqlcmd -U "sa" -P "P@ssword" -Q "CREATE DATABASE testing;"
+
+    - name: Run test suite
+      run: composer test
