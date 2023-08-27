@@ -40,6 +40,10 @@ class WaterlineApplicationServiceProvider extends ServiceProvider
 
     public function register()
     {
+        if (! class_exists('Workflow\Models\Model')) {
+            class_alias(config('workflows.base_model', Model::class), 'Workflow\Models\Model');
+        }
+
         $drivers = [
             'mongodb' => WorkflowRepositoryMongoDB::class,
             'mysql' => WorkflowRepositoryMySQL::class,
