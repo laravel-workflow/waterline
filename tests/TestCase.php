@@ -24,24 +24,8 @@ abstract class TestCase extends BaseTestCase
 
     protected function getEnvironmentSetUp($app)
     {
-        if (! class_exists('\Workflow\Models\Model')) {
-            if (env('DB_CONNECTION') === 'mongodb') {
-                class_alias(\Jenssegers\Mongodb\Eloquent\Model::class, '\Workflow\Models\Model');
-            } else {
-                class_alias(\Illuminate\Database\Eloquent\Model::class, '\Workflow\Models\Model');
-            }
-        }
-
         $app['config']->set('app.debug', true);
         $app['config']->set('app.key', 'base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=');
-        $app['config']->set('database.connections.mongodb', [
-            'driver' => 'mongodb',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', 27017),
-            'database' => env('DB_DATABASE', 'homestead'),
-            'username' => env('DB_USERNAME', 'homestead'),
-            'password' => env('DB_PASSWORD', 'secret'),
-        ]);
     }
 
     protected function defineDatabaseMigrations()
@@ -68,6 +52,23 @@ abstract class TestCase extends BaseTestCase
 
     protected function getPackageProviders($app)
     {
-        return ['Jenssegers\Mongodb\MongodbServiceProvider', 'Waterline\WaterlineServiceProvider'];
+        if (! class_exists('\Workflow\Models\Model')) {
+            if (env('DB_CONNECTION') === 'mongodb') {
+                class_alias(\Jenssegers\Mongodb\Eloquent\Model::class, '\Workflow\Models\Model');
+            } else {
+                class_alias(\Illuminate\Database\Eloquent\Model::class, '\Workflow\Models\Model');
+            }
+        }
+
+        $app['config']->set('database.connections.mongodb', [
+            'driver' => 'mongodb',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE', 'homestead'),
+            'username' => env('DB_USERNAME', 'homestead'),
+            'password' => env('DB_PASSWORD', 'secret'),
+        ]);
+
+        return ['Jenssegers\Mongodb\MongodbServiceProvider', 'Waterline\WaterlineServiceProvider', 'Waterline\WaterlineApplicationServiceProvider'];
     }
 }

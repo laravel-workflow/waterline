@@ -2,8 +2,16 @@
 
 namespace Waterline;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Waterline\Repositories\Workflow\Infrastructure\WorkflowRepositoryMongoDB;
+use Waterline\Repositories\Workflow\Infrastructure\WorkflowRepositoryMySQL;
+use Waterline\Repositories\Workflow\Infrastructure\WorkflowRepositoryPostgreSQL;
+use Waterline\Repositories\Workflow\Infrastructure\WorkflowRepositorySQLite;
+use Waterline\Repositories\Workflow\Infrastructure\WorkflowRepositorySQLServer;
+use Waterline\Repositories\Workflow\Interfaces\WorkflowRepositoryInterface;
+use Workflow\Models\StoredWorkflow;
 
 class WaterlineApplicationServiceProvider extends ServiceProvider
 {
@@ -32,6 +40,16 @@ class WaterlineApplicationServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+        $drivers = [
+            'mongodb' => WorkflowRepositoryMongoDB::class,
+            'mysql' => WorkflowRepositoryMySQL::class,
+            'pgsql' => WorkflowRepositoryPostgreSQL::class,
+            'sqlite' => WorkflowRepositorySQLite::class,
+            'sqlsrv' => WorkflowRepositorySQLServer::class,
+        ];
+
+        $driver = DB::connection((new (config('workflows.stored_workflow_model', StoredWorkflow::class)))->getConnectionName())->getDriverName();
+
+        $this->app->bind(WorkflowRepositoryInterface::class, $drivers[$driver] ?? WorkflowRepositoryMySQL::class);
     }
 }
