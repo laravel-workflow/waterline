@@ -44,7 +44,11 @@ class WorkflowsController extends Controller
         $flow->exceptions = $flow->exceptions->map(function ($exception) {
             $exception->code ??= null;
             $unserialized = Y::unserialize($exception->exception);
-            if (is_array($unserialized) && array_key_exists('class', $unserialized) && is_subclass_of($unserialized['class'], \Throwable::class)) {
+            if (is_array($unserialized)
+                && array_key_exists('class', $unserialized)
+                && is_subclass_of($unserialized['class'], \Throwable::class)
+                && file_exists($unserialized['file'])
+            ) {
                 $file = new SplFileObject($unserialized['file']);
                 $file->seek($unserialized['line'] - 4);
                 for ($line = 0; $line < 7; ++$line) {
@@ -53,22 +57,6 @@ class WorkflowsController extends Controller
                     if ($file->eof()) break;
                 }
                 $exception->code = rtrim($exception->code);
-                $exception->exception = serialize($unserialized);
-            } else {
-                if (is_object($unserialized) && method_exists($unserialized, 'getFile')) {
-                    $file = new SplFileObject($unserialized->getFile());
-                    $file->seek($unserialized->getLine() - 4);
-                    for ($line = 0; $line < 7; ++$line) {
-                        $exception->code .= $file->current();
-                        $file->next();
-                        if ($file->eof()) break;
-                    }
-                    $exception->code = rtrim($exception->code);
-                    try {
-                        $unserialized->trace = $unserialized->getTrace();
-                    } catch (\Throwable $th) {
-                    }
-                }
                 $exception->exception = serialize($unserialized);
             }
             return $exception;
