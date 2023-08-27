@@ -18,7 +18,7 @@ class WorkflowsController extends Controller
         return config('workflows.stored_workflow_model', StoredWorkflow::class)::whereStatus('failed')
             ->orderByDesc('id')
             ->paginate(50);
-        }
+    }
 
     public function running() {
         return config('workflows.stored_workflow_model', StoredWorkflow::class)::whereIn('status', [
