@@ -31,9 +31,4 @@ class StoredWorkflowResource extends JsonResource
             "chartData" => app(WorkflowToChartDataTransformer::class)->transform($this->resource),
         ];
     }
-
-    private function mapExceptions()
-    {
-
-    }
 }
