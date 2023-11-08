@@ -30,7 +30,7 @@ class WorkflowToChartDataTransformer
     }
 
     /**
-     * @return ChartDataPoint
+     * @return ChartDataPoint[]
      */
     private function transformWorkflow(StoredWorkflow $storedWorkflow) : array {
         $data = [
