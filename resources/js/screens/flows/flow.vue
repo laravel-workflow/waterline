@@ -233,7 +233,7 @@ export default {
                             let data = w.globals.initialSeries[seriesIndex].data[dataPointIndex]
 
                             return '<div style="padding: 1em">' +
-                                '<b>Activity</b>: ' + data.x.split('_')[0] + '<br />' +
+                                '<b>'+data.type+'</b>: ' + data.x.split('_')[0] + '<br />' +
                                 '<b>Time</b>: ' + (data.y[1] - data.y[0]) + 'ms </div>'
                         }
                         if (seriesIndex === 1) {
@@ -298,16 +298,7 @@ export default {
             this.$http.get(Waterline.basePath + '/api/flows/' + id)
                 .then(response => {
                     this.flow = response.data;
-                    this.series[0].data = this.flow.logs.map((activity, index, activities) => {
-                        return {
-                            x: activity.class,
-                            y: [
-                                index === 0 ? moment(this.flow.created_at).valueOf() : moment(activities[index - 1].created_at).valueOf(),
-                                moment(activity.created_at).valueOf(),
-                            ],
-                        }
-                    })
-
+                    this.series[0].data = response.data.chartData;
                     this.series[1].data = this.flow.exceptions.map((exception) => {
                         this.$nextTick(() => {
                             this.$nextTick(() => {
@@ -331,7 +322,7 @@ export default {
                             ],
                             fillColor: '#721c24',
                         }
-                    })
+                    });
 
                     this.ready = true;
                 });

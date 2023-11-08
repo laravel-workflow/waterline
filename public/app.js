@@ -2280,7 +2280,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               w = _ref.w;
             if (seriesIndex === 0) {
               var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-              return '<div style="padding: 1em">' + '<b>Activity</b>: ' + data.x.split('_')[0] + '<br />' + '<b>Time</b>: ' + (data.y[1] - data.y[0]) + 'ms </div>';
+              return '<div style="padding: 1em">' + '<b>' + data.type + '</b>: ' + data.x.split('_')[0] + '<br />' + '<b>Time</b>: ' + (data.y[1] - data.y[0]) + 'ms </div>';
             }
             if (seriesIndex === 1) {
               var exception = phpunserialize__WEBPACK_IMPORTED_MODULE_0___default()(_this.flow.exceptions[dataPointIndex].exception);
@@ -2332,12 +2332,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       this.ready = false;
       this.$http.get(Waterline.basePath + '/api/flows/' + id).then(function (response) {
         _this2.flow = response.data;
-        _this2.series[0].data = _this2.flow.logs.map(function (activity, index, activities) {
-          return {
-            x: activity["class"],
-            y: [index === 0 ? moment_timezone__WEBPACK_IMPORTED_MODULE_1___default()(_this2.flow.created_at).valueOf() : moment_timezone__WEBPACK_IMPORTED_MODULE_1___default()(activities[index - 1].created_at).valueOf(), moment_timezone__WEBPACK_IMPORTED_MODULE_1___default()(activity.created_at).valueOf()]
-          };
-        });
+        _this2.series[0].data = response.data.chartData;
         _this2.series[1].data = _this2.flow.exceptions.map(function (exception) {
           _this2.$nextTick(function () {
             _this2.$nextTick(function () {
