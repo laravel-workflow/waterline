@@ -2280,7 +2280,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               w = _ref.w;
             if (seriesIndex === 0) {
               var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-              return '<div style="padding: 1em">' + '<b>Activity</b>: ' + data.x.split('_')[0] + '<br />' + '<b>Time</b>: ' + (data.y[1] - data.y[0]) + 'ms </div>';
+              return '<div style="padding: 1em">' + '<b>' + data.type + '</b>: ' + data.x.split('_')[0] + '<br />' + '<b>Time</b>: ' + (data.y[1] - data.y[0]) + 'ms </div>';
             }
             if (seriesIndex === 1) {
               var exception = phpunserialize__WEBPACK_IMPORTED_MODULE_0___default()(_this.flow.exceptions[dataPointIndex].exception);

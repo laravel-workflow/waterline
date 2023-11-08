@@ -11,6 +11,7 @@ class ChartDataPoint implements JsonSerializable
         private string $x,
         private float | int $yMin,
         private float | int $yMax,
+        private string $type,
     ) {}
 
     public function jsonSerialize(): mixed
@@ -18,6 +19,7 @@ class ChartDataPoint implements JsonSerializable
         return [
             'x' => $this->x,
             'y' => [$this->yMin, $this->yMax],
+            'type' => $this->type,
         ];
     }
 }

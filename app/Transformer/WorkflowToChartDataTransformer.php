@@ -37,7 +37,8 @@ class WorkflowToChartDataTransformer
             app(ChartDataPoint::class, [
                 'x' => $storedWorkflow->class,
                 'yMin' => (float) $storedWorkflow->created_at->isoFormat('XSSS'),
-                'yMax' => (float) $storedWorkflow->updated_at->isoFormat('XSSS',),
+                'yMax' => (float) $storedWorkflow->updated_at->isoFormat('XSSS'),
+                'type' => 'Workflow'
             ])
         ];
 
@@ -63,6 +64,7 @@ class WorkflowToChartDataTransformer
             'x' => $storedWorkflowLog->class,
             'yMin' => (float) $prevLogCreated->isoFormat('XSSS'),
             'yMax' => (float) $storedWorkflowLog->created_at->isoFormat('XSSS'),
+            'type' => 'Activity',
         ]);
     }
 }

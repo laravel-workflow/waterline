@@ -233,7 +233,7 @@ export default {
                             let data = w.globals.initialSeries[seriesIndex].data[dataPointIndex]
 
                             return '<div style="padding: 1em">' +
-                                '<b>Activity</b>: ' + data.x.split('_')[0] + '<br />' +
+                                '<b>'+data.type+'</b>: ' + data.x.split('_')[0] + '<br />' +
                                 '<b>Time</b>: ' + (data.y[1] - data.y[0]) + 'ms </div>'
                         }
                         if (seriesIndex === 1) {
