@@ -47,9 +47,4 @@ class StoredWorkflowExceptionResource extends JsonResource
             "created_at" => $this->created_at,
         ];
     }
-
-    private function mapExceptions()
-    {
-
-    }
 }
