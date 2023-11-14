@@ -19,7 +19,7 @@ class DashboardWorkflowTest extends TestCase
             'status' => 'created',
         ]);
 
-        $storedWorkflow->logs()->create([
+        $storedLog = $storedWorkflow->logs()->create([
             'index' => 0,
             'now' => now()->toDateTimeString(),
             'class' => 'Activity1Class',
@@ -50,12 +50,12 @@ class DashboardWorkflowTest extends TestCase
                         'logs',
                         1,
                         fn (AssertableJson $log) => $log
-                            ->whereType("id", 'integer')
-                            ->where("index", 0)
-                            ->whereType("now", 'string')
-                            ->where("class", 'Activity1Class')
-                            ->where("result", 'N;')
-                            ->whereType("created_at", 'string')
+                            ->where('id', $storedLog->id)
+                            ->where('index', 0)
+                            ->whereType('now', 'string')
+                            ->where('class', 'Activity1Class')
+                            ->where('result', 'N;')
+                            ->whereType('created_at', 'string')
                     )
                     ->has(
                         'exceptions',
