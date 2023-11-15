@@ -3,11 +3,8 @@ declare(strict_types=1);
 
 namespace Waterline\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use SplFileObject;
-use Waterline\Transformer\WorkflowToChartDataTransformer;
-use Workflow\Models\StoredWorkflow;
 use Workflow\Models\StoredWorkflowException;
 use Workflow\Serializers\Y;
 
@@ -18,9 +15,9 @@ class StoredWorkflowExceptionResource extends JsonResource
 {
     public static $wrap = null;
 
-    public function toArray(Request $request)
+    public function toArray($request)
     {
-        $code = null;
+        $code = '';
         $exception = $this->exception;
 
         $unserialized = Y::unserialize($exception);
@@ -32,11 +29,11 @@ class StoredWorkflowExceptionResource extends JsonResource
             $file = new SplFileObject($unserialized['file']);
             $file->seek($unserialized['line'] - 4);
             for ($line = 0; $line < 7; ++$line) {
-                $exception->code .= $file->current();
+                $code .= $file->current();
                 $file->next();
                 if ($file->eof()) break;
             }
-            $code = rtrim($exception->code);
+            $code = rtrim($code);
             $exception = serialize($unserialized);
         }
 
