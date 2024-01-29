@@ -28,7 +28,7 @@
         "sass": "^1.26.3",
         "sass-loader": "^11.0.1",
         "sql-formatter": "^4.0.2",
-        "sweetalert2": "^11.6.8",
+        "sweetalert2": "11.4.8",
         "vue": "^2.5.7",
         "vue-apexcharts": "^1.6.2",
         "vue-json-pretty": "^1.4.1",
