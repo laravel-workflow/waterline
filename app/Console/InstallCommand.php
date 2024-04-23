@@ -3,6 +3,7 @@
 namespace Waterline\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
 class InstallCommand extends Command
@@ -36,17 +37,21 @@ class InstallCommand extends Command
     {
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
-        $appConfig = file_get_contents(config_path('app.php'));
+        if (file_exists($this->laravel->bootstrapPath('providers.php'))) {
+            ServiceProvider::addProviderToBootstrapFile("{$namespace}\\Providers\\WaterlineServiceProvider");
+        } else {
+            $appConfig = file_get_contents(config_path('app.php'));
 
-        if (Str::contains($appConfig, $namespace.'\\Providers\\WaterlineServiceProvider::class')) {
-            return;
+            if (Str::contains($appConfig, $namespace.'\\Providers\\WaterlineServiceProvider::class')) {
+                return;
+            }
+
+            file_put_contents(config_path('app.php'), str_replace(
+                "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
+                "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\WaterlineServiceProvider::class,".PHP_EOL,
+                $appConfig
+            ));
         }
-
-        file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\WaterlineServiceProvider::class,".PHP_EOL,
-            $appConfig
-        ));
 
         file_put_contents(app_path('Providers/WaterlineServiceProvider.php'), str_replace(
             "namespace App\Providers;",

@@ -40,18 +40,18 @@ RUN apt-get update \
     && apt-get install -y mysql-client \
     && apt-get install -y postgresql-client-$POSTGRES_VERSION \
     && apt-get install -y unixodbc-dev unixodbc odbcinst \
-    && cd /tmp \
-    && curl -O https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/msodbcsql17/msodbcsql17_17.10.1.1-1_amd64.deb \
-    && curl -O https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/mssql-tools/mssql-tools_17.10.1.1-1_amd64.deb \
-    && ACCEPT_EULA=Y dpkg -i msodbcsql17_17.10.1.1-1_amd64.deb \
-    && ACCEPT_EULA=Y dpkg -i mssql-tools_17.10.1.1-1_amd64.deb \
-    && apt-get install -f \
-    && pecl update-channels \
-    && pecl install sqlsrv \
-    && pecl install pdo_sqlsrv \
-    && echo "extension=sqlsrv.so" | tee -a /etc/php/8.2/mods-available/sqlsrv.ini \
-    && echo "extension=pdo_sqlsrv.so" | tee -a /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
-    && phpenmod sqlsrv pdo_sqlsrv \
+    # && cd /tmp \
+    # && curl -O https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/msodbcsql17/msodbcsql17_17.10.1.1-1_amd64.deb \
+    # && curl -O https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/mssql-tools/mssql-tools_17.10.1.1-1_amd64.deb \
+    # && ACCEPT_EULA=Y dpkg -i msodbcsql17_17.10.1.1-1_amd64.deb \
+    # && ACCEPT_EULA=Y dpkg -i mssql-tools_17.10.1.1-1_amd64.deb \
+    # && apt-get install -f \
+    # && pecl update-channels \
+    # && pecl install sqlsrv \
+    # && pecl install pdo_sqlsrv \
+    # && echo "extension=sqlsrv.so" | tee -a /etc/php/8.2/mods-available/sqlsrv.ini \
+    # && echo "extension=pdo_sqlsrv.so" | tee -a /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
+    # && phpenmod sqlsrv pdo_sqlsrv \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
