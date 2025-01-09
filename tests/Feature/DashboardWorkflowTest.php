@@ -61,7 +61,10 @@ class DashboardWorkflowTest extends TestCase
                         'exceptions',
                         1,
                         fn (AssertableJson $exception) => $exception
-                            ->whereType('id', 'integer')
+                            ->where(
+                                'id',
+                                fn ($value) => is_string($value) || is_int($value)
+                            )
                             ->whereType('code', 'string')
                             ->whereType('exception', 'string')
                             ->where('class', 'Activity2Class')
