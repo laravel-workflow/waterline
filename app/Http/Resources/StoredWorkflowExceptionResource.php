@@ -38,6 +38,7 @@ class StoredWorkflowExceptionResource extends JsonResource
         }
 
         return [
+            "id" => $this->id,
             "code" => $code,
             "exception" => $exception,
             "class" => $this->class,
