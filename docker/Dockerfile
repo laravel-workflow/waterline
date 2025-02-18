@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-LABEL maintainer="Richard McDaniel"
+LABEL maintainer="Taylor Otwell"
 
 ARG WWWGROUP
 ARG NODE_VERSION=18
@@ -46,13 +46,15 @@ RUN apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> /etc/profile.d/mssql.sh \
-    && apt-get install -y php-pear php-dev \
+    && apt-get install -y php-pear php8.2-xml php8.2-dev \
     && pecl channel-update pecl.php.net \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv \
     && echo "extension=sqlsrv.so" > /etc/php/8.2/mods-available/sqlsrv.ini \
     && echo "extension=pdo_sqlsrv.so" > /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
     && phpenmod sqlsrv pdo_sqlsrv \
+    # Ensure PHP 8.3 is not installed
+    && apt-get remove -y php8.3-cli php8.3-dev || true \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
