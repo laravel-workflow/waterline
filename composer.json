@@ -18,8 +18,8 @@
         "jenssegers/mongodb": "^3.9",
         "mockery/mockery": "^1.4.4",
         "mongodb/mongodb": "1.11|^1.20",
-        "orchestra/testbench": "^7.29|^10.0",
-        "phpunit/phpunit": "^9.5.10|^11.5.3"
+        "orchestra/testbench": "^7.29",
+        "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
         "psr-4": {
