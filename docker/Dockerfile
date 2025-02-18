@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-LABEL maintainer="Taylor Otwell"
+LABEL maintainer="Richard McDaniel"
 
 ARG WWWGROUP
 ARG NODE_VERSION=18
@@ -40,18 +40,19 @@ RUN apt-get update \
     && apt-get install -y mysql-client \
     && apt-get install -y postgresql-client-$POSTGRES_VERSION \
     && apt-get install -y unixodbc-dev unixodbc odbcinst \
-    # && cd /tmp \
-    # && curl -O https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/msodbcsql17/msodbcsql17_17.10.1.1-1_amd64.deb \
-    # && curl -O https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/mssql-tools/mssql-tools_17.10.1.1-1_amd64.deb \
-    # && ACCEPT_EULA=Y dpkg -i msodbcsql17_17.10.1.1-1_amd64.deb \
-    # && ACCEPT_EULA=Y dpkg -i mssql-tools_17.10.1.1-1_amd64.deb \
-    # && apt-get install -f \
-    # && pecl update-channels \
-    # && pecl install sqlsrv \
-    # && pecl install pdo_sqlsrv \
-    # && echo "extension=sqlsrv.so" | tee -a /etc/php/8.2/mods-available/sqlsrv.ini \
-    # && echo "extension=pdo_sqlsrv.so" | tee -a /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
-    # && phpenmod sqlsrv pdo_sqlsrv \
+    && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg >/dev/null \
+    && echo "deb [signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" | tee /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools \
+    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
+    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> /etc/profile.d/mssql.sh \
+    && apt-get install -y php-pear php-dev \
+    && pecl channel-update pecl.php.net \
+    && pecl install sqlsrv \
+    && pecl install pdo_sqlsrv \
+    && echo "extension=sqlsrv.so" > /etc/php/8.2/mods-available/sqlsrv.ini \
+    && echo "extension=pdo_sqlsrv.so" > /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
+    && phpenmod sqlsrv pdo_sqlsrv \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
