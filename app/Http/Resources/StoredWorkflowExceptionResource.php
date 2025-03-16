@@ -6,7 +6,7 @@ namespace Waterline\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use SplFileObject;
 use Workflow\Models\StoredWorkflowException;
-use Workflow\Serializers\Y;
+use Workflow\Serializers\Serializer;
 
 /**
  * @mixin StoredWorkflowException
@@ -20,7 +20,7 @@ class StoredWorkflowExceptionResource extends JsonResource
         $code = '';
         $exception = $this->exception;
 
-        $unserialized = Y::unserialize($exception);
+        $unserialized = Serializer::unserialize($exception);
         if (is_array($unserialized)
             && array_key_exists('class', $unserialized)
             && is_subclass_of($unserialized['class'], \Throwable::class)

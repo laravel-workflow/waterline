@@ -5,7 +5,7 @@ namespace Waterline\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Workflow\Models\StoredWorkflowLog;
-use Workflow\Serializers\Y;
+use Workflow\Serializers\Serializer;
 
 /**
  * @mixin StoredWorkflowLog
@@ -21,7 +21,7 @@ class StoredWorkflowLogResource extends JsonResource
             "index" => $this->index,
             "now" => $this->now,
             "class" => $this->class,
-            "result" => serialize(Y::unserialize($this->result)),
+            "result" => serialize(Serializer::unserialize($this->result)),
             "created_at" => $this->created_at,
         ];
     }

@@ -6,7 +6,7 @@ namespace Waterline\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Waterline\Transformer\WorkflowToChartDataTransformer;
 use Workflow\Models\StoredWorkflow;
-use Workflow\Serializers\Y;
+use Workflow\Serializers\Serializer;
 
 /**
  * @mixin StoredWorkflow
@@ -20,8 +20,8 @@ class StoredWorkflowResource extends JsonResource
         return [
             "id" => $this->id,
             "class" => $this->class,
-            "arguments" => serialize(Y::unserialize($this->arguments)),
-            "output" => $this->output === null ? serialize(null) : serialize(Y::unserialize($this->output)),
+            "arguments" => serialize(Serializer::unserialize($this->arguments)),
+            "output" => $this->output === null ? serialize(null) : serialize(Serializer::unserialize($this->output)),
             "status" => $this->status,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,

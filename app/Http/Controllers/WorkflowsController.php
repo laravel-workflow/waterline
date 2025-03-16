@@ -6,7 +6,6 @@ use SplFileObject;
 use Waterline\Http\Resources\StoredWorkflowResource;
 use Waterline\Transformer\WorkflowToChartDataTransformer;
 use Workflow\Models\StoredWorkflow;
-use Workflow\Serializers\Y;
 
 class WorkflowsController extends Controller
 {
