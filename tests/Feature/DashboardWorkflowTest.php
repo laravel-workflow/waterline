@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Waterline\Tests\TestCase;
 use Workflow\Models\StoredWorkflow;
-use Workflow\Serializers\Y;
+use Workflow\Serializers\Serializer;
 
 class DashboardWorkflowTest extends TestCase
 {
@@ -28,7 +28,7 @@ class DashboardWorkflowTest extends TestCase
 
         $storedWorkflow->exceptions()->create([
             'class' => 'Activity2Class',
-            'exception' => Y::serialize(new Exception('ExceptionMessage')),
+            'exception' => Serializer::serialize(new Exception('ExceptionMessage')),
         ]);
 
 
