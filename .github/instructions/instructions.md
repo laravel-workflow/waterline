@@ -26,7 +26,8 @@ applyTo: '**'
    ```
 4. Run migrations:
    ```bash
-   ./vendor/bin/testbench migrate:fresh
+   ./vendor/bin/testbench workbench:create-sqlite-db
+   ./vendor/bin/testbench migrate:fresh --database=sqlite
    ```
 5. Start server:
    ```bash
@@ -53,7 +54,7 @@ applyTo: '**'
 - Start server: `composer run serve`
 - Publish assets: `./vendor/bin/testbench waterline:publish`
 - Run tests: `composer test`
-- Debug browser: `node .github/tools/debug-browser-errors.js`
+- Debug browser: `node .github/tools/browser.js`
 
 ## Troubleshooting
 - Mix manifest not found: rebuild and publish assets
@@ -80,11 +81,12 @@ applyTo: '**'
 - composer install && npm install
 - npm run production
 - ./vendor/bin/testbench waterline:publish
-- ./vendor/bin/testbench migrate:fresh
+- ./vendor/bin/testbench workbench:create-sqlite-db
+- ./vendor/bin/testbench migrate:fresh --database=sqlite
 - composer run serve
 - ./vendor/bin/testbench workflow:create-test
 - ./vendor/bin/testbench queue:work
-- node .github/tools/debug-browser-errors.js
+- node .github/tools/browser.js
 
 ## Success Output
 Working install should show:
