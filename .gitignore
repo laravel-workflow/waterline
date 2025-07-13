@@ -18,4 +18,7 @@ yarn-error.log
 .DS_Store
 .github/tools/debug-screenshot.png
 .github/tools/debug-dashboard.html
+composer.lock
+package-lock.json
+yarn.lock
 

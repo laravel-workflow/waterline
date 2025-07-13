@@ -43,7 +43,6 @@ abstract class TestCase extends BaseTestCase
 
         artisan($this, 'migrate:fresh');
         $this->loadLaravelMigrations();
-        $this->loadMigrationsFrom('./vendor/laravel-workflow/laravel-workflow/src/migrations');
 
         $this->beforeApplicationDestroyed(
             fn () => artisan($this, 'migrate:rollback')
