@@ -47,8 +47,7 @@
             "@php vendor/bin/testbench serve --ansi"
         ],
         "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "test": "vendor/bin/phpunit --testdox",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "test": "composer test-mongo && composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
         "test-all": "composer test-mongo && composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
         "test-mongo": "vendor/bin/phpunit --testdox --configuration=phpunit-mongo.xml",
         "test-mssql": "vendor/bin/phpunit --testdox --configuration=phpunit-mssql.xml",
