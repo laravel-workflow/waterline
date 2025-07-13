@@ -5,40 +5,26 @@
   */
 
 /*!
- * ApexCharts v3.36.1
- * (c) 2018-2022 ApexCharts
+ * ApexCharts v3.54.1
+ * (c) 2018-2024 ApexCharts
  * Released under the MIT License.
  */
 
 /*!
- * Sizzle CSS Selector Engine v2.3.6
- * https://sizzlejs.com/
- *
- * Copyright JS Foundation and other contributors
- * Released under the MIT license
- * https://js.foundation/
- *
- * Date: 2021-02-16
- */
-
-/*!
- * Vue.js v2.7.13
- * (c) 2014-2022 Evan You
+ * Vue.js v2.7.16
+ * (c) 2014-2023 Evan You
  * Released under the MIT License.
  */
 
 /*!
- * jQuery JavaScript Library v3.6.1
+ * jQuery JavaScript Library v3.7.1
  * https://jquery.com/
- *
- * Includes Sizzle.js
- * https://sizzlejs.com/
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2022-08-26T17:52Z
+ * Date: 2023-08-28T13:37Z
  */
 
 /*!
@@ -111,4 +97,4 @@
 
 //! moment.js
 
-//! version : 0.5.38
+//! version : 0.5.48

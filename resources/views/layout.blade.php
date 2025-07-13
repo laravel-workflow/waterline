@@ -98,8 +98,18 @@
 <!-- Global Waterline Object -->
 <script>
     window.Waterline = @json($waterlineScriptVariables);
+    console.log('Waterline config:', window.Waterline);
 </script>
 
 <script src="{{asset(mix('app.js', 'vendor/waterline'))}}"></script>
+
+<!-- Debug Info -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded');
+        console.log('Vue element:', document.getElementById('waterline'));
+        console.log('Waterline object:', window.Waterline);
+    });
+</script>
 </body>
 </html>

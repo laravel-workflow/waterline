@@ -19,6 +19,7 @@
         "mongodb/laravel-mongodb": "^3.9",
         "mongodb/mongodb": "1.11",
         "orchestra/testbench": "^7.29",
+        "orchestra/workbench": "^7.29",
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
@@ -32,7 +33,17 @@
         }
     },
     "scripts": {
-        "test": "composer test-mongo && composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php ./vendor/bin/testbench serve"
+        ],
+        "build": [
+            "@php ./vendor/bin/testbench workbench:build --ansi"
+        ],
+        "test": "vendor/bin/phpunit --testdox",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "test-all": "composer test-mongo && composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
         "test-mongo": "vendor/bin/phpunit --testdox --configuration=phpunit-mongo.xml",
         "test-mssql": "vendor/bin/phpunit --testdox --configuration=phpunit-mssql.xml",
         "test-mysql": "vendor/bin/phpunit --testdox --configuration=phpunit-mysql.xml",

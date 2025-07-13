@@ -1,0 +1,35 @@
+name: waterline
+providers:
+  - Waterline\WaterlineServiceProvider
+  - Waterline\WaterlineApplicationServiceProvider
+
+install:
+  - laravel-workflow/laravel-workflow
+
+auto-discovery:
+  - laravel-workflow/laravel-workflow
+
+commands:
+  - waterline:install
+  - waterline:publish
+
+sync:
+  - config/waterline.php
+  - resources/views
+  - public/app.css
+  - public/app-dark.css
+  - public/app.js
+  - public/mix-manifest.json
+  - public/img
+
+build:
+  - npm run production
+
+workbench:
+  start: /waterline
+  user: admin@example.com
+  guard: web
+
+discovers:
+  web: ./routes/web.php
+  config: ./config/waterline.php
