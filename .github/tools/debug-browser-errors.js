@@ -159,15 +159,18 @@ async function captureBrowserErrors() {
         }
 
         // Wait for dashboard to render workflow count (adjust selector as needed)
+        // Wait for dashboard to render non-zero Total Flows value
         try {
-            await page.waitForSelector('.workflow-count', { timeout: 10000 });
             await page.waitForFunction(() => {
-                const el = document.querySelector('.workflow-count');
-                return el && el.textContent && el.textContent.trim() !== '0';
+                const statsLabels = Array.from(document.querySelectorAll('small.text-uppercase'));
+                const totalFlowsLabel = statsLabels.find(el => el.textContent.trim() === 'Total Flows');
+                if (!totalFlowsLabel) return false;
+                const valueEl = totalFlowsLabel.parentElement.querySelector('h4');
+                return valueEl && valueEl.textContent && valueEl.textContent.trim() !== '0';
             }, { timeout: 10000 });
-            console.log('✅ Workflow count detected and non-zero.');
+            console.log('✅ Total Flows detected and non-zero.');
         } catch (e) {
-            console.log('⚠️ Could not detect non-zero workflow count, proceeding with screenshot anyway.');
+            console.log('⚠️ Could not detect non-zero Total Flows, proceeding with screenshot anyway.');
         }
 
         // Wait a bit for any async operations
@@ -196,15 +199,20 @@ async function captureBrowserErrors() {
         }));
 
         // Take a screenshot for visual debugging
+        const fs = require('fs');
+        const path = require('path');
+        const toolsDir = path.join(process.cwd(), '.github', 'tools');
+        if (!fs.existsSync(toolsDir)) {
+            fs.mkdirSync(toolsDir, { recursive: true });
+        }
+        // Save screenshot to .github/tools
         await page.screenshot({
-            path: '/var/www/html/debug-screenshot.png',
+            path: path.join(toolsDir, 'debug-screenshot.png'),
             fullPage: true
         });
-
-        // Save the HTML for analysis
+        // Save HTML to .github/tools
         const pageHTML = await page.content();
-        const fs = require('fs');
-        fs.writeFileSync('/var/www/html/debug-dashboard.html', pageHTML);
+        fs.writeFileSync(path.join(toolsDir, 'debug-dashboard.html'), pageHTML);
 
         // Scan for localhost/127.0.0.1 references in src/href attributes
         const localhostRegex = /(localhost|127\.0\.0\.1)/i;
@@ -287,7 +295,7 @@ async function captureBrowserErrors() {
             console.log('\n✅ No HTTP errors');
         }
 
-        console.log('\n📸 Screenshot saved to: /var/www/html/debug-screenshot.png');
+        console.log(`\n📸 Screenshot saved to: ${path.join(toolsDir, 'debug-screenshot.png')}`);
 
     } catch (error) {
         console.error('❌ Error during debugging:', error);
