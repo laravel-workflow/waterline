@@ -29,18 +29,24 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Waterline\\Tests\\": "tests/"
+            "Waterline\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "scripts": {
-        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare",
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ],
         "serve": [
             "Composer\\Config::disableProcessTimeout",
-            "@php ./vendor/bin/testbench serve"
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
         ],
-        "build": [
-            "@php ./vendor/bin/testbench workbench:build --ansi"
-        ],
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
         "test": "vendor/bin/phpunit --testdox",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "test-all": "composer test-mongo && composer test-mssql && composer test-mysql && composer test-pgsql && composer test-sqlite",
@@ -48,7 +54,9 @@
         "test-mssql": "vendor/bin/phpunit --testdox --configuration=phpunit-mssql.xml",
         "test-mysql": "vendor/bin/phpunit --testdox --configuration=phpunit-mysql.xml",
         "test-pgsql": "vendor/bin/phpunit --testdox --configuration=phpunit-pgsql.xml",
-        "test-sqlite": "vendor/bin/phpunit --testdox --configuration=phpunit-sqlite.xml"
+        "test-sqlite": "vendor/bin/phpunit --testdox --configuration=phpunit-sqlite.xml",
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi"
     },
     "extra": {
         "laravel": {

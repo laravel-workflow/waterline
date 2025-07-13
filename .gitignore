@@ -16,3 +16,6 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
+debug-screenshot.png
+debug-dashboard.html
+

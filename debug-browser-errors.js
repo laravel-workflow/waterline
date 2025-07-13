@@ -103,6 +103,17 @@ async function captureBrowserErrors() {
             });
         });
 
+
+        // Capture all network requests
+        const allRequests = [];
+        page.on('request', request => {
+            allRequests.push({
+                url: request.url(),
+                method: request.method(),
+                resourceType: request.resourceType()
+            });
+        });
+
         // Capture failed requests
         const failedRequests = [];
         page.on('requestfailed', request => {
@@ -128,14 +139,39 @@ async function captureBrowserErrors() {
 
         console.log('🔍 Navigating to Waterline dashboard...');
 
-        // Navigate to the page
-        await page.goto('https://obscure-eureka-5grq4j94px245q5-8000.app.github.dev/waterline', {
-            waitUntil: 'networkidle2',
-            timeout: 30000
-        });
+
+        // Use the public Codespaces URL
+        const publicUrl = 'https://legendary-broccoli-5grq4j9vp63v7qp-8000.app.github.dev/waterline';
+        console.log(`🔗 Navigating to public URL: ${publicUrl}`);
+        await page.goto(publicUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
+
+        // Detect and click Codespaces warning if present
+        try {
+            await page.waitForSelector('button', { timeout: 5000 });
+            const buttonText = await page.$eval('button', el => el.textContent);
+            if (buttonText && buttonText.toLowerCase().includes('continue')) {
+                console.log('⚠️ Codespaces warning detected, clicking continue...');
+                await page.click('button');
+                await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 20000 });
+            }
+        } catch (e) {
+            console.log('No Codespaces warning detected, proceeding...');
+        }
+
+        // Wait for dashboard to render workflow count (adjust selector as needed)
+        try {
+            await page.waitForSelector('.workflow-count', { timeout: 10000 });
+            await page.waitForFunction(() => {
+                const el = document.querySelector('.workflow-count');
+                return el && el.textContent && el.textContent.trim() !== '0';
+            }, { timeout: 10000 });
+            console.log('✅ Workflow count detected and non-zero.');
+        } catch (e) {
+            console.log('⚠️ Could not detect non-zero workflow count, proceeding with screenshot anyway.');
+        }
 
         // Wait a bit for any async operations
-        await page.waitForTimeout(3000);
+        await new Promise(resolve => setTimeout(resolve, 3000));
 
         // Try to evaluate if Vue is mounted
         const vueStatus = await page.evaluate(() => {
@@ -164,6 +200,28 @@ async function captureBrowserErrors() {
             path: '/var/www/html/debug-screenshot.png',
             fullPage: true
         });
+
+        // Save the HTML for analysis
+        const pageHTML = await page.content();
+        const fs = require('fs');
+        fs.writeFileSync('/var/www/html/debug-dashboard.html', pageHTML);
+
+        // Scan for localhost/127.0.0.1 references in src/href attributes
+        const localhostRegex = /(localhost|127\.0\.0\.1)/i;
+        const linkRegex = /<(a|img|script|link)[^>]+(href|src)=["']([^"'>]+)["']/gi;
+        let match;
+        let found = [];
+        while ((match = linkRegex.exec(pageHTML)) !== null) {
+            if (localhostRegex.test(match[3])) {
+                found.push(match[0]);
+            }
+        }
+        if (found.length > 0) {
+            console.log('\n🚨 Found references to localhost/127.0.0.1 in dashboard HTML:');
+            found.forEach(l => console.log(l));
+        } else {
+            console.log('\n✅ No localhost/127.0.0.1 references found in dashboard HTML.');
+        }
 
         console.log('\n📊 DEBUGGING RESULTS:');
         console.log('===================');
@@ -196,6 +254,18 @@ async function captureBrowserErrors() {
             });
         } else {
             console.log('\n✅ No page errors detected');
+        }
+
+
+        // Log all API requests
+        const apiRequests = allRequests.filter(r => r.url.includes('/api/'));
+        if (apiRequests.length > 0) {
+            console.log('\n🔎 API Requests:');
+            apiRequests.forEach((req, index) => {
+                console.log(`${index + 1}. ${req.method} ${req.url} [${req.resourceType}]`);
+            });
+        } else {
+            console.log('\n⚠️ No API requests detected');
         }
 
         if (failedRequests.length > 0) {

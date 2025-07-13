@@ -1,12 +1,12 @@
 providers:
-  - Waterline\WaterlineServiceProvider
   - Waterline\WaterlineApplicationServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
 
 env:
   - APP_KEY=base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=
-  - DB_CONNECTION=testing
 
-migrations: true
+migrations:
+  - /var/www/html/workbench/database/migrations
 
 seeders: false
 
