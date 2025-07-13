@@ -9,12 +9,11 @@ class DashboardController extends Controller
     public function index() {
         return view('waterline::layout', [
             'assetsAreCurrent' => true,
-            'cssFile' => 'app-dark.css',
+            'cssFile' => true ? 'app-dark.css' : 'app.css',
             'waterlineScriptVariables' => [
                 'path' => config('waterline.path', 'waterline'),
-                'basePath' => '/' . config('waterline.path', 'waterline'),
             ],
             'isDownForMaintenance' => App::isDownForMaintenance(),
-        ]);
+        ]);       
     }
 }

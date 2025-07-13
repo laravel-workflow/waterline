@@ -3,15 +3,14 @@
 namespace Waterline\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Waterline\Repositories\Workflow\Interfaces\WorkflowRepositoryInterface;
 use Workflow\Models\StoredWorkflow;
 use Workflow\Models\StoredWorkflowException;
 
 class DashboardStatsController extends Controller
 {
-    public function index(WorkflowRepositoryInterface $repository)
-    {
+    public function index(WorkflowRepositoryInterface $repository) {
+
         $flowsPastHour = $repository->flowsPastHour();
 
         return response()->json([
