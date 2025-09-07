@@ -16,8 +16,6 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
-.github/tools/debug-screenshot.png
-.github/tools/debug-dashboard.html
 composer.lock
 package-lock.json
 yarn.lock
