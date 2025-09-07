@@ -16,6 +16,8 @@ class WorkbenchServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Workbench\App\Console\CreateTestWorkflow::class,
+                \Workbench\App\Console\CreateTestParentWorkflow::class,
+                \Workbench\App\Console\CreateTestContinueAsNewWorkflow::class,
             ]);
         }
     }

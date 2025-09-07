@@ -40,9 +40,21 @@ export default {
             if (!this.autoLoadsNewEntries) {
                 this.autoLoadsNewEntries = true;
                 localStorage.autoLoadsNewEntries = 1;
+                if (this.refreshStatsPeriodically) {
+                    this.refreshStatsPeriodically();
+                }
+                if (this.refreshFlowsPeriodically) {
+                    this.refreshFlowsPeriodically();
+                }
             } else {
                 this.autoLoadsNewEntries = false;
                 localStorage.autoLoadsNewEntries = 0;
+                if (this.timeout) {
+                    clearTimeout(this.timeout);
+                }
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
             }
         },
 

@@ -4,8 +4,8 @@ providers:
 
 env:
   - APP_KEY=base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=
-  - APP_URL=https://glorious-pancake-x5pw974w4729g7p-8000.app.github.dev
-  - ASSET_URL=https://glorious-pancake-x5pw974w4729g7p-8000.app.github.dev
+  - APP_URL=http://localhost:8000
+  - ASSET_URL=http://localhost:8000
   - DB_CONNECTION=sqlite
   - DB_DATABASE=/var/www/html/vendor/orchestra/testbench-core/laravel/database/database.sqlite
   - QUEUE_CONNECTION=database

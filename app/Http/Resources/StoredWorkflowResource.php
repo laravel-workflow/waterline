@@ -27,6 +27,8 @@ class StoredWorkflowResource extends JsonResource
             "updated_at" => $this->updated_at,
             "logs" => StoredWorkflowLogResource::collection($this->logs),
             "exceptions" => StoredWorkflowExceptionResource::collection($this->exceptions),
+            "parents" => StoredWorkflowRelationshipResource::collection($this->parents),
+            "continuedWorkflows" => StoredWorkflowRelationshipResource::collection($this->continuedWorkflows),
             "chartData" => app(WorkflowToChartDataTransformer::class)->transform($this->resource),
         ];
     }

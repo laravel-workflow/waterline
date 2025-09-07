@@ -8,7 +8,7 @@
             <br>
 
             <small class="text-muted">
-                ID: {{flow.id}}
+                ID: {{flow.id}} <span v-if="flow.status === 'continued'" class="badge badge-info ml-1">Continued</span>
             </small>
         </td>
 

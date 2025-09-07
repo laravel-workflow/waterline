@@ -39,14 +39,24 @@
 
                 <div class="row mb-2">
                     <div class="col-md-2"><strong>Completed At</strong></div>
-                    <div class="col" v-if="flow.status === 'completed'">{{ timestamp(flow.updated_at) }}</div>
+                    <div class="col" v-if="(flow.status === 'completed' || flow.status === 'continued')">{{ timestamp(flow.updated_at) }}</div>
                     <div class="col" v-else>-</div>
                 </div>
 
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-2"><strong>Duration</strong></div>
-                    <div class="col" v-if="flow.status === 'completed'">{{ duration(flow.created_at, flow.updated_at) }}</div>
+                    <div class="col" v-if="(flow.status === 'completed' || flow.status === 'continued')">{{ duration(flow.created_at, flow.updated_at) }}</div>
                     <div class="col" v-else>-</div>
+                </div>
+
+                <div class="row mb-2" v-if="flow.parents.length">
+                    <div class="col-md-2"><strong v-if="flow.parents[0].parent_index === 9223372036854776000">Continued From</strong><strong v-else>Parent ID</strong></div>
+                    <div class="col">{{ flow.parents[0].parent_workflow_id }}</div>
+                </div>
+
+                <div class="row mb-2" v-if="flow.continuedWorkflows.length">
+                    <div class="col-md-2"><strong>Continued As</strong></div>
+                    <div class="col">{{ flow.continuedWorkflows[0].child_workflow_id }}</div>
                 </div>
             </div>
         </div>
@@ -65,7 +75,7 @@
             </div>
         </div>
 
-        <div class="card mt-4" v-if="ready && flow.status === 'completed'">
+        <div class="card mt-4" v-if="ready && (flow.status === 'completed' || flow.status === 'continued')">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5>Output</h5>
 
