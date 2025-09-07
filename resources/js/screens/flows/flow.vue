@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="row mb-2" v-if="flow.parents.length">
-                    <div class="col-md-2"><strong v-if="flow.parents[0].parent_index === 9223372036854776000">Continued From</strong><strong v-else>Parent ID</strong></div>
+                    <div class="col-md-2"><strong v-if="flow.parents[0].parent_index > Number.MAX_SAFE_INTEGER">Continued From</strong><strong v-else>Parent ID</strong></div>
                     <div class="col">{{ flow.parents[0].parent_workflow_id }}</div>
                 </div>
 
