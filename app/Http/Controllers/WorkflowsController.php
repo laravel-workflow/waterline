@@ -36,7 +36,12 @@ class WorkflowsController extends Controller
     }
 
     public function show($id) {
-        $flow = config('workflows.stored_workflow_model', StoredWorkflow::class)::with(['exceptions', 'logs', 'parents'])->find($id);
+        $flow = config('workflows.stored_workflow_model', StoredWorkflow::class)::with([
+            'continuedWorkflows',
+            'exceptions',
+            'logs',
+            'parents'
+        ])->find($id);
 
         return StoredWorkflowResource::make($flow);
     }
