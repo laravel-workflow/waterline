@@ -48,7 +48,7 @@
         watch: {
             '$route'() {
                 this.updatePageTitle();
-                        
+
                 this.page = 1;
 
                 this.loadFlows();
@@ -98,7 +98,9 @@
                         return;
                     }
 
-                    this.loadFlows(1, true);
+                    if (this.$root.autoLoadsNewEntries) {
+                        this.loadFlows(1, true);
+                    }
                 }, 3000);
             },
 

@@ -46,6 +46,8 @@ class DashboardWorkflowTest extends TestCase
                     ->where('status', 'created')
                     ->whereType('created_at', 'string')
                     ->whereType('updated_at', 'string')
+                    ->has('parents', 0)
+                    ->has('continuedWorkflows', 0)
                     ->has(
                         'logs',
                         1,

@@ -62,7 +62,9 @@
                     this.ready = true;
 
                     this.timeout = setTimeout(() => {
-                        this.refreshStatsPeriodically();
+                        if (this.$root.autoLoadsNewEntries) {
+                            this.refreshStatsPeriodically();
+                        }
                     }, 5000);
                 });
             },

@@ -13,5 +13,6 @@ chmod -R ugo+rw /.composer
 if [ $# -gt 0 ]; then
     exec gosu $WWWUSER "$@"
 else
-    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    # Just keep the container running
+    exec sleep infinity
 fi

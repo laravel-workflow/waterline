@@ -21,12 +21,23 @@ mix.options({
             },
         },
     },
+    processCssUrls: false,
 })
     .setPublicPath('public')
     .js('resources/js/app.js', 'public')
     .vue()
-    .sass('resources/sass/app.scss', 'public')
-    .sass('resources/sass/app-dark.scss', 'public')
+    .sass('resources/sass/app.scss', 'public', {
+        sassOptions: {
+            quietDeps: true,
+            silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions', 'abs-percent', 'mixed-decls']
+        }
+    })
+    .sass('resources/sass/app-dark.scss', 'public', {
+        sassOptions: {
+            quietDeps: true,
+            silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions', 'abs-percent', 'mixed-decls']
+        }
+    })
     .version()
     .copy('resources/img', 'public/img')
     .webpackConfig({
